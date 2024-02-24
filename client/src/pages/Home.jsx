@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { Card, FormField, Loader } from '../components';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState(null);
 
@@ -13,7 +14,7 @@ const Home = () => {
   const RenderCards = ({ data, title }) => {
     if (data?.length > 0) {
       return (
-        data.map((post) => <Card key={post._id} {...post} />)
+        data.map((post) => <Card key={post._id} onViewDetail={viewProductDetail} {...post} />)
       );
     }
   
@@ -21,11 +22,14 @@ const Home = () => {
       <h2 className="mt-5 font-bold text-[#6469ff] text-xl uppercase">{title}</h2>
     );
   };
+  const viewProductDetail = () => {
+    navigate(`/product`);
+  }
   const fetchPosts = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/v1/post', {
+      const response = await fetch('https://diverhood-mvp.onrender.com/api/v1/post', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
